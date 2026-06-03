@@ -16,25 +16,18 @@ html, body {
   color: var(--bianco);
 }
 
-/* HERO: backdrop fisso a tutto schermo, si rivela durante la transizione */
-.hero {
+/* ---------- SFONDO: stessa immagine fissa per entrambe le pagine ---------- */
+.bg {
   position: fixed;
   inset: 0;
-  z-index: 1;
-  opacity: 0;
-  overflow: hidden;
-}
-
-.hero__bg {
-  position: absolute;
-  inset: 0;
+  z-index: 0;
   background-image: url("foto_hero.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  z-index: 0;
 }
 
+/* ---------- LOGO: fisso al margine 0px ---------- */
 .logo {
   position: fixed;
   top: 0;
@@ -51,27 +44,7 @@ html, body {
   height: auto;
 }
 
-.hero__title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  width: 100%;
-  text-align: center;
-  font-weight: 500;
-  font-size: clamp(48px, 11vw, 200px);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  color: var(--bianco);
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-.hero__title span {
-  display: block;
-}
-
+/* ---------- MENU: fisso, in basso a sinistra ---------- */
 .menu {
   position: fixed;
   left: clamp(16px, 2.2vw, 32px);
@@ -80,14 +53,14 @@ html, body {
   display: flex;
   flex-direction: column;
   font-weight: 700;
-  font-size: clamp(13px, 1.1vw, 18px);
+  font-size: clamp(15px, 1.4vw, 22px);
   letter-spacing: 0.02em;
 }
 
 .menu a {
   /* interlinea del menu ridotta a 12px */
   line-height: 12px;
-  padding: 4px 0;
+  padding: 7px 0;
   color: var(--azzurro);
   text-decoration: none;
   transition: color 0.2s ease;
@@ -97,30 +70,57 @@ html, body {
   color: var(--bianco);
 }
 
-/* ---------- INTRO (apertura) ---------- */
-#scroller {
-  position: relative;
-  z-index: 2;
-}
-
-.intro {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-}
-
-.intro__text {
-  margin: 0;
-  padding: 0 6vw;
-  text-align: center;
+/* ---------- TESTO INIZIALE: fisso, in basso a destra ---------- */
+.intro-text {
+  position: fixed;
+  right: clamp(24px, 3.2vw, 48px);
+  bottom: 34%;
+  z-index: 6;
+  text-align: right;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: clamp(40px, 9vw, 170px);
-  line-height: 0.98;
+  font-size: clamp(18px, 2.4vw, 34px);
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+  color: var(--bianco);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- TITOLO IN MOVIMENTO: compare scrollando ---------- */
+.hero__title {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  font-size: clamp(48px, 11vw, 200px);
+  line-height: 0.95;
   letter-spacing: -0.02em;
   color: var(--bianco);
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0; /* nascosto finché non si scrolla (gestito da GSAP) */
+}
+
+.hero__title span {
+  display: block;
+}
+
+/* ---------- TRACCIA DI SCROLL (due pagine) ---------- */
+.scroll-track {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.scroll-track .page {
+  width: 100%;
+  height: 100vh;
+}
+
+@media (max-width: 640px) {
+  .intro-text { bottom: 30%; }
 }

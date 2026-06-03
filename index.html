@@ -10,12 +10,15 @@
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<!-- Logo: fissato al margine 0px, sempre visibile -->
+<!-- Sfondo: stessa immagine fissa per entrambe le pagine -->
+<div class="bg" role="img" aria-label="Maradona"></div>
+
+<!-- Logo: fisso al margine 0px -->
 <a class="logo" href="#" aria-label="Mira Maradona">
   <img src="logo_blue_01.svg" alt="Mira Maradona" />
 </a>
 
-<!-- Menu -->
+<!-- Menu: fisso, in basso a sinistra -->
 <nav class="menu" aria-label="Menu principale">
   <a href="#about">/ ABOUT</a>
   <a href="#gallery">/ GALLERY</a>
@@ -23,26 +26,23 @@
   <a href="#mappe">/ MAPPE</a>
 </nav>
 
-<!-- PAGINA HERO (esistente): resta come backdrop fisso e si rivela con lo scroll -->
-<section class="hero">
-  <div class="hero__bg" role="img" aria-label="Maradona"></div>
+<!-- Testo iniziale: fisso, in basso a destra (apertura del sito) -->
+<p class="intro-text">
+  ICONOGRAFIA DEL MITO ARGENTINO,<br />DIEGO ARMANDO MARADONA.
+</p>
 
-  <h1 class="hero__title">
-    <span>OPERAZIONE</span>
-    <span>MARADONA</span>
-    <span>(2026)</span>
-  </h1>
-</section>
+<!-- Unico elemento in movimento: compare scrollando alla seconda pagina -->
+<h1 class="hero__title" aria-hidden="false">
+  <span>OPERAZIONE</span>
+  <span>MARADONA</span>
+  <span>(2026)</span>
+</h1>
 
-<!-- SCROLLER: l'intro si apre per prima, poi con lo scroll si arriva all'hero -->
-<main id="scroller">
-  <!-- INTRO: il sito si apre con questo testo grande -->
-  <section class="intro" id="intro">
-    <h2 class="intro__text">
-      ICONOGRAFIA DEL MITO ARGENTINO,<br />DIEGO ARMANDO MARADONA.
-    </h2>
-  </section>
-</main>
+<!-- Traccia di scroll: fornisce l'altezza per le due pagine -->
+<div class="scroll-track" aria-hidden="true">
+  <section class="page"></section>
+  <section class="page"></section>
+</div>
 
 <!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

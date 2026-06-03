@@ -1,11 +1,11 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* ------------------------------------------------------------------
-   Entrata: il sito si apre con il testo grande dell'intro.
+   Entrata: il sito si apre con sfondo, logo, menu e testo iniziale.
 ------------------------------------------------------------------ */
-gsap.from(".intro__text", {
+gsap.from(".intro-text", {
   opacity: 0,
-  y: 40,
+  y: 24,
   duration: 1.1,
   ease: "power3.out",
 });
@@ -13,82 +13,37 @@ gsap.from(".intro__text", {
 gsap.from(".logo, .menu", {
   opacity: 0,
   duration: 1.1,
-  delay: 0.3,
+  delay: 0.25,
   ease: "power2.out",
 });
 
 /* ------------------------------------------------------------------
-   Scroll: l'intro resta bloccata nel viewport (scroll-to-lock) mentre
-   il testo grande rimpicciolisce e si SOVRAPPONE al titolo dell'hero
-   (la prima pagina), che si rivela sotto.
+   Scroll: lo sfondo, il logo, il menu e il testo iniziale restano FISSI.
+   L'unico elemento che si muove è il titolo "OPERAZIONE MARADONA (2026)",
+   che compare e sale al centro passando dalla pagina 1 alla pagina 2.
+   Effetto scroll-to-lock: snap del viewport tra le due pagine.
 ------------------------------------------------------------------ */
-const introText = document.querySelector(".intro__text");
-const heroTitle = document.querySelector(".hero__title");
-
-let tl;
-
-function buildTimeline() {
-  const it = introText.getBoundingClientRect();
-  const ht = heroTitle.getBoundingClientRect();
-
-  // allinea i centri e adatta la scala al titolo dell'hero
-  const dx = (ht.left + ht.width / 2) - (it.left + it.width / 2);
-  const dy = (ht.top + ht.height / 2) - (it.top + it.height / 2);
-  const scale = ht.height / it.height;
-
-  tl = gsap.timeline({
+gsap.fromTo(
+  ".hero__title",
+  { xPercent: -50, yPercent: -50, y: 90, opacity: 0 },
+  {
+    xPercent: -50,
+    yPercent: -50,
+    y: 0,
+    opacity: 1,
+    ease: "none",
     scrollTrigger: {
-      trigger: "#intro",
+      trigger: ".scroll-track",
       start: "top top",
-      end: "+=120%",
+      end: "bottom bottom",
       scrub: true,
-      pin: true,
-      anticipatePin: 1,
-    },
-  });
-
-  // l'hero (con il suo titolo) si rivela sotto
-  tl.fromTo(".hero", { opacity: 0 }, { opacity: 1, ease: "none" }, 0)
-    // il testo grande rimpicciolisce e scivola fino a sovrapporsi al titolo dell'hero
-    .to(
-      introText,
-      {
-        x: dx,
-        y: dy,
-        scale: scale,
-        transformOrigin: "center center",
-        ease: "none",
+      snap: {
+        snapTo: [0, 1],
+        duration: { min: 0.2, max: 0.6 },
+        ease: "power2.inOut",
       },
-      0
-    );
-}
+    },
+  }
+);
 
-buildTimeline();
-
-/* ------------------------------------------------------------------
-   Effetto "lock viewport": snap dello scroll alle due pagine.
------------------------------------------------------------------- */
-ScrollTrigger.create({
-  snap: {
-    snapTo: [0, 1],
-    duration: { min: 0.2, max: 0.6 },
-    ease: "power2.inOut",
-  },
-  start: 0,
-  end: "max",
-});
-
-/* Ricalcolo posizioni al resize */
-let resizeTimer;
-window.addEventListener("resize", () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (tl) {
-      tl.scrollTrigger && tl.scrollTrigger.kill();
-      tl.kill();
-    }
-    gsap.set(introText, { clearProps: "all" });
-    buildTimeline();
-    ScrollTrigger.refresh();
-  }, 200);
-});
+window.addEventListener("resize", () => ScrollTrigger.refresh());
