@@ -31,7 +31,7 @@ html, body {
 .logo {
   position: fixed;
   top: 0;
-  left: 36px;
+  left: 48px;
   margin: 0;
   z-index: 10;
   display: block;
@@ -47,8 +47,8 @@ html, body {
 /* ---------- MENU: fisso, in basso a sinistra ---------- */
 .menu {
   position: fixed;
-  left: 36px;
-  bottom: clamp(16px, 2.2vw, 32px);
+  left: 48px;
+  bottom: 36px;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@ html, body {
 /* ---------- TESTO INIZIALE: fisso, in basso a destra ---------- */
 .intro-text {
   position: fixed;
-  right: 36px;
+  right: 48px;
   bottom: 34%;
   z-index: 6;
   text-align: right;
