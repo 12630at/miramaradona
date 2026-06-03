@@ -30,7 +30,7 @@ html, body {
 /* ---------- LOGO: fisso al margine 0px ---------- */
 .logo {
   position: fixed;
-  top: 36px;
+  top: 0;
   left: 36px;
   margin: 0;
   z-index: 10;
@@ -73,7 +73,7 @@ html, body {
 /* ---------- TESTO INIZIALE: fisso, in basso a destra ---------- */
 .intro-text {
   position: fixed;
-  right: clamp(24px, 3.2vw, 48px);
+  right: 36px;
   bottom: 34%;
   z-index: 6;
   text-align: right;
