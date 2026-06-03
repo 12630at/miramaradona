@@ -1,21 +1,28 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* ------------------------------------------------------------------
-   Entrata: il sito si apre con sfondo, logo, menu e testo iniziale.
+   Entrata: animazione iniziale della prima scritta (reveal a maschera,
+   riga per riga) insieme alla comparsa di logo e menu.
 ------------------------------------------------------------------ */
-gsap.from(".intro-text", {
-  opacity: 0,
-  y: 24,
-  duration: 1.1,
-  ease: "power3.out",
-});
+const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-gsap.from(".logo, .menu", {
-  opacity: 0,
-  duration: 1.1,
-  delay: 0.25,
-  ease: "power2.out",
-});
+intro
+  .from(".intro-text .line > span", {
+    yPercent: 120,
+    duration: 1.1,
+    stagger: 0.15,
+    delay: 0.2,
+  })
+  .from(
+    ".intro-text",
+    { opacity: 0, duration: 0.6, ease: "none" },
+    0
+  )
+  .from(
+    ".logo, .menu",
+    { opacity: 0, y: 12, duration: 1, ease: "power2.out" },
+    0.45
+  );
 
 /* ------------------------------------------------------------------
    Scroll: lo sfondo, il logo, il menu e il testo iniziale restano FISSI.
