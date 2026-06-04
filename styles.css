@@ -17,11 +17,11 @@ html, body {
   color: var(--bianco);
 }
 
-/* ---------- SFONDO: stessa immagine fissa per entrambe le pagine ---------- */
+/* ---------- SFONDO HERO: foto a tutto schermo che si rimpicciolisce ---------- */
 .bg {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   background-image: url("foto_hero.webp");
   background-size: cover;
   background-position: center;
@@ -29,6 +29,20 @@ html, body {
   /* la fotografia si rimpicciolisce verso l'angolo in alto a destra */
   transform-origin: 100% 0;
   will-change: transform;
+}
+
+/* ---------- SFONDO ABOUT: foto b/n a tutto schermo, dietro la hero ---------- */
+.about-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: url("foto_about.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--nero);
+  opacity: 0; /* compare scrollando (gestito da GSAP) */
+  will-change: transform, opacity;
 }
 
 /* ---------- LOGO: fisso al margine 0px ---------- */
@@ -75,6 +89,11 @@ html, body {
   color: var(--bianco);
 }
 
+/* voce attiva: nella sezione about "ABOUT" diventa bianco */
+.nav-about .menu a.about {
+  color: var(--bianco);
+}
+
 /* ---------- TESTO INIZIALE: fisso, in basso a destra ---------- */
 .intro-text {
   position: fixed;
@@ -99,6 +118,31 @@ html, body {
 
 .intro-text .line > span {
   display: block;
+}
+
+/* ---------- TESTO ABOUT: in basso a destra, compare nella sezione about ---------- */
+.about-text {
+  position: fixed;
+  right: 48px;
+  bottom: 40px;
+  z-index: 6;
+  max-width: 797px;
+  text-align: right;
+  text-transform: uppercase;
+  font-family: "Manrope", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: clamp(15px, 1.7vw, 24px);
+  line-height: 1.25;
+  color: var(--bianco);
+  opacity: 0; /* fade-in gestito da GSAP */
+}
+
+.about-text span {
+  display: block;
+}
+
+.about-text .spacer {
+  height: 0.6em;
 }
 
 /* ---------- TITOLO IN MOVIMENTO: compare scrollando ---------- */

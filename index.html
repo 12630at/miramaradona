@@ -10,7 +10,10 @@
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<!-- Sfondo: stessa immagine fissa per entrambe le pagine -->
+<!-- Sfondo ABOUT: foto b/n a tutto schermo, compare scrollando (dietro la foto hero) -->
+<div class="about-bg" role="img" aria-label="Maradona sollevato dalla folla"></div>
+
+<!-- Sfondo: foto hero, a tutto schermo poi si rimpicciolisce in alto a destra -->
 <div class="bg" role="img" aria-label="Maradona"></div>
 
 <!-- Logo: fisso al margine 0px -->
@@ -20,7 +23,7 @@
 
 <!-- Menu: fisso, in basso a sinistra -->
 <nav class="menu" aria-label="Menu principale">
-  <a href="#about">/ ABOUT</a>
+  <a class="about" href="#about">/ ABOUT</a>
   <a href="#gallery">/ GALLERY</a>
   <a href="#team">/ TEAM</a>
   <a href="#maps">/ MAPS</a>
@@ -39,8 +42,20 @@
   <span>(2026)</span>
 </h1>
 
-<!-- Traccia di scroll: fornisce l'altezza per le tre pagine -->
+<!-- Testo ABOUT: compare in basso a destra nella sezione about -->
+<p class="about-text">
+  <span>Siamo esploratori urbani tra i vicoli di Napoli, dove</span>
+  <span>la street art trasforma i muri in altari e Maradona è la bussola emotiva del riscatto sociale di un popolo.</span>
+  <span class="spacer" aria-hidden="true"></span>
+  <span>Co-creiamo un’esperienza itinerante e condivisa per vivere</span>
+  <span>lo spazio sospeso tra la cruda realtà dei bassi e l'aura</span>
+  <span>di una città che si reinventa attraverso il suo dio.</span>
+</p>
+
+<!-- Traccia di scroll: fornisce l'altezza per le cinque pagine -->
 <div class="scroll-track" aria-hidden="true">
+  <section class="page"></section>
+  <section class="page"></section>
   <section class="page"></section>
   <section class="page"></section>
   <section class="page"></section>

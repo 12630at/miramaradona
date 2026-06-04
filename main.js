@@ -25,19 +25,26 @@ intro
   );
 
 /* ------------------------------------------------------------------
-   Scroll su tre pagine.
+   Scroll su cinque pagine.
 
-   Pagina 1 -> 2 : compare il titolo "OPERAZIONE MARADONA (2026)" che
-                   sale al centro del viewport (logo, menu e testo
-                   restano fissi, lo sfondo è a tutto schermo).
+   Pag. 1 -> 2 : compare il titolo "OPERAZIONE MARADONA (2026)" che
+                 sale al centro del viewport (logo, menu e testo
+                 restano fissi, lo sfondo è a tutto schermo).
 
-   Pagina 2 -> 3 : lo SFONDO (la fotografia) si rimpicciolisce con
-                   un'animazione GSAP e si posiziona in alto a destra,
-                   rispettando il margine; il titolo lo segue,
-                   rimpicciolendosi e centrandosi sopra la foto; il
-                   testo di descrizione si dissolve.
+   Pag. 2 -> 3 : lo SFONDO hero si rimpicciolisce con un'animazione GSAP
+                 e si posiziona in alto a destra, rispettando il margine;
+                 il titolo lo segue rimpicciolendosi e centrandosi sopra
+                 la foto. Il testo "iconografia del mito argentino…"
+                 RIMANE al suo posto.
 
-   Lo snap blocca il viewport su ciascuna delle tre pagine.
+   Pag. 3 -> 4 : (ABOUT) la foto b/n a tutto schermo e il testo about
+                 appaiono gradualmente fino a fermarsi in posizione.
+
+   Pag. 4 -> 5 : (GALLERY) la foto b/n si alza e scompare insieme alla
+                 foto hero e al titolo in alto a destra, mentre il testo
+                 about resta sullo sfondo nero.
+
+   Lo snap blocca il viewport su ciascuna delle cinque pagine.
 ------------------------------------------------------------------ */
 
 /* Geometria del riquadro finale della fotografia (in alto a destra).
@@ -61,7 +68,7 @@ const tl = gsap.timeline({
     scrub: true,
     invalidateOnRefresh: true,
     snap: {
-      snapTo: [0, 0.5, 1],
+      snapTo: [0, 0.25, 0.5, 0.75, 1],
       duration: { min: 0.2, max: 0.6 },
       ease: "power2.inOut",
     },
@@ -76,8 +83,8 @@ tl.fromTo(
   0
 );
 
-/* --- Segmento 2 (pagina 2 -> 3): la foto si rimpicciolisce in alto a destra,
-       il titolo la segue e il testo di descrizione si dissolve. --- */
+/* --- Segmento 2 (pag. 2 -> 3): la foto hero si rimpicciolisce in alto a
+       destra e il titolo la segue. Il testo iniziale resta fermo. --- */
 tl.to(
   ".bg",
   {
@@ -100,10 +107,33 @@ tl.to(
   1
 );
 
-tl.to(
-  ".intro-text",
-  { opacity: 0, ease: "none" },
-  1
+/* --- Segmento 3 (pag. 3 -> 4, ABOUT): la foto b/n e il testo about
+       appaiono gradualmente. --- */
+tl.to(".about-bg", { opacity: 1, ease: "none" }, 2);
+tl.fromTo(
+  ".about-text",
+  { opacity: 0, y: 40 },
+  { opacity: 1, y: 0, ease: "power2.out" },
+  2
 );
+
+/* --- Segmento 4 (pag. 4 -> 5, GALLERY): la foto b/n si alza e scompare
+       insieme alla foto hero e al titolo; il testo about resta. --- */
+tl.to(".about-bg", { yPercent: -100, opacity: 0, ease: "power2.in" }, 3);
+tl.to(
+  ".bg",
+  { y: () => M - window.innerHeight, opacity: 0, ease: "power2.in" },
+  3
+);
+tl.to(".hero__title", { y: "-=350", opacity: 0, ease: "power2.in" }, 3);
+
+/* Stato attivo del menu: "ABOUT" diventa bianco dalle sezioni about/gallery. */
+ScrollTrigger.create({
+  trigger: ".scroll-track",
+  start: "top top",
+  end: "bottom bottom",
+  onUpdate: (self) =>
+    document.body.classList.toggle("nav-about", self.progress > 0.6),
+});
 
 window.addEventListener("resize", () => ScrollTrigger.refresh());
