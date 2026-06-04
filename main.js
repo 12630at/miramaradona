@@ -108,7 +108,8 @@ tl.to(
 );
 
 /* --- Segmento 3 (pag. 3 -> 4, ABOUT): la foto b/n e il testo about
-       appaiono gradualmente. --- */
+       appaiono gradualmente; contemporaneamente il titolo "OPERAZIONE
+       MARADONA" e la sua foto in alto a destra scompaiono. --- */
 tl.to(".about-bg", { opacity: 1, ease: "none" }, 2);
 tl.fromTo(
   ".about-text",
@@ -116,16 +117,16 @@ tl.fromTo(
   { opacity: 1, y: 0, ease: "power2.out" },
   2
 );
-
-/* --- Segmento 4 (pag. 4 -> 5, GALLERY): la foto b/n si alza e scompare
-       insieme alla foto hero e al titolo; il testo about resta. --- */
-tl.to(".about-bg", { yPercent: -100, opacity: 0, ease: "power2.in" }, 3);
 tl.to(
   ".bg",
   { y: () => M - window.innerHeight, opacity: 0, ease: "power2.in" },
-  3
+  2
 );
-tl.to(".hero__title", { y: "-=350", opacity: 0, ease: "power2.in" }, 3);
+tl.to(".hero__title", { y: "-=350", opacity: 0, ease: "power2.in" }, 2);
+
+/* --- Segmento 4 (pag. 4 -> 5, GALLERY): la foto b/n si alza e scompare,
+       mentre il testo about resta sullo sfondo nero. --- */
+tl.to(".about-bg", { yPercent: -100, opacity: 0, ease: "power2.in" }, 3);
 
 /* Stato attivo del menu: "ABOUT" diventa bianco dalle sezioni about/gallery. */
 ScrollTrigger.create({

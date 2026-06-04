@@ -22,7 +22,7 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 1;
-  background-image: url("foto_hero.webp");
+  background-image: url("assets/foto_hero.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -36,7 +36,7 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-image: url("foto_about.webp");
+  background-image: url("assets/foto_about.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -89,9 +89,37 @@ html, body {
   color: var(--bianco);
 }
 
-/* voce attiva: nella sezione about "ABOUT" diventa bianco */
+/* marker animato: passa da "/" a "_" quando la voce è attiva */
+.menu .marker {
+  position: relative;
+  display: inline-block;
+}
+
+.menu .marker .slash,
+.menu .marker .underscore {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.menu .marker .underscore {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(0.32em);
+}
+
+/* voce attiva: "/ ABOUT" azzurro diventa "_ ABOUT" bianco */
 .nav-about .menu a.about {
   color: var(--bianco);
+}
+
+.nav-about .menu a.about .marker .slash {
+  opacity: 0;
+  transform: translateY(-0.32em);
+}
+
+.nav-about .menu a.about .marker .underscore {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ---------- TESTO INIZIALE: fisso, in basso a destra ---------- */
