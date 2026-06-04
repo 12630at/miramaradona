@@ -122,7 +122,7 @@ tl.to(".hero__title", { y: "-=350", opacity: 0, ease: "power2.in" }, 2);
        alzano e scompaiono; la gallery (due colonne) appare --- */
 tl.to(".about-text", { yPercent: -120, opacity: 0, ease: "power2.in" }, 3);
 tl.to(".about-bg", { yPercent: -100, opacity: 0, ease: "power2.in" }, 3);
-tl.to(".gallery", { opacity: 1, ease: "power2.out" }, 3);
+tl.to(".gallery-section", { opacity: 1, ease: "power2.out" }, 3);
 
 /* --- Segmento 5 (GALLERY): scorrimento verso la seconda coppia --- */
 tl.fromTo(
