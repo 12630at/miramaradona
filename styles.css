@@ -36,7 +36,7 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-image: url("assets/foto_about.png");
+  background-image: url("assets/foto_about.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -264,6 +264,56 @@ html, body {
   line-height: 1.25;
   text-transform: uppercase;
   color: var(--bianco);
+}
+
+/* ---------- MAPS / FOOTER: foto a tutto schermo con "CERCA DIEGO" ---------- */
+.footer-section {
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  opacity: 0; /* compare scrollando (gestito da GSAP) */
+  will-change: opacity, transform;
+}
+
+.footer-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.footer-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 400;
+  font-size: clamp(56px, 13.3vw, 192px);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--bianco);
+  text-decoration: underline;
+  text-decoration-thickness: 0.02em;
+  text-underline-offset: 0.06em;
+  white-space: nowrap;
+}
+
+.footer-copy {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: -0.05em;
+  color: var(--bianco);
+  white-space: nowrap;
+}
+
+.footer-copy span {
+  text-transform: uppercase;
 }
 
 /* ---------- TRACCIA DI SCROLL ---------- */

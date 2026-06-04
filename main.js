@@ -1,4 +1,4 @@
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 /* ------------------------------------------------------------------
    Entrata: animazione iniziale della prima scritta (reveal a maschera,
@@ -25,7 +25,7 @@ intro
   );
 
 /* ------------------------------------------------------------------
-   Scroll su dieci pagine (nove segmenti), senza scroll-to-snap.
+   Scroll su undici pagine (dieci segmenti), senza scroll-to-snap.
 
    1 : compare il titolo "OPERAZIONE MARADONA (2026)" che sale al centro.
    2 : la foto hero si rimpicciolisce in alto a destra e il titolo la segue.
@@ -36,8 +36,10 @@ intro
        colonne di foto.
    6 : (GALLERY) scorrimento opposto verso la seconda coppia.
    7 : (GALLERY) scorrimento fino alla terza coppia.
-   8 : (TEAM ingresso) la gallery si alza e scompare, appare la sezione team.
+   8 : (TEAM ingresso) la gallery si alza e scompare; appare il team con
+       "creative directors" che sta per entrare dal margine inferiore.
    9 : (TEAM) i crediti scorrono verticalmente verso l'alto.
+  10 : (MAPS) il team si alza e scompare, appare il footer "CERCA DIEGO".
 ------------------------------------------------------------------ */
 
 /* Geometria del riquadro finale della fotografia hero (in alto a destra).
@@ -54,11 +56,16 @@ const boxCY = () => M + boxH() / 2;
 /* La colonna destra della gallery parte dal basso (mostra la prima coppia). */
 gsap.set('.gallery__track[data-col="right"]', { yPercent: -66.667 });
 
-/* Scorrimento massimo del track team: track alto 190vh (5 righe da 38vh),
-   viewport 100vh -> (190-100)/190 = 47.37% */
-const TEAM_END = -47.37;
+/* TEAM: il track parte spinto in basso ("creative directors" che sta per
+   entrare dal margine inferiore) e scorre verso l'alto fino a mostrare
+   l'ultima riga. Valori in px, ricalcolati su resize. */
+const teamTrack = document.querySelector(".team-track");
+const teamStart = () => window.innerHeight * 0.8;
+const teamEnd = () =>
+  -(teamTrack.offsetHeight - window.innerHeight);
+gsap.set(".team-track", { y: teamStart });
 
-const SEGMENTS = 9;
+const SEGMENTS = 10;
 
 const tl = gsap.timeline({
   defaults: { ease: "none" },
@@ -149,17 +156,33 @@ tl.fromTo(
   6
 );
 
-/* --- Segmento 8 (TEAM ingresso): la gallery si alza e scompare, appare
-       la sezione team --- */
+/* --- Segmento 8 (TEAM ingresso): la gallery si alza e scompare, appare la
+       sezione team con "creative directors" che entra dal basso --- */
 tl.to(".gallery-section", { yPercent: -100, opacity: 0, ease: "power2.inOut" }, 7);
 tl.to(".team-section", { opacity: 1, ease: "power2.out" }, 7);
 
-/* --- Segmento 9 (TEAM): i crediti scorrono verticalmente verso l'alto --- */
+/* --- Segmento 9 (TEAM): i crediti scorrono verticalmente verso l'alto
+       (parte da metà segmento 8, dura due segmenti) --- */
 tl.fromTo(
   ".team-track",
-  { yPercent: 0 },
-  { yPercent: TEAM_END, ease: "none" },
-  8
+  { y: teamStart },
+  { y: teamEnd, ease: "none", duration: 2 },
+  7
+);
+
+/* --- Segmento 10 (MAPS): il team si alza e scompare, appare il footer --- */
+tl.to(".team-section", { yPercent: -100, opacity: 0, ease: "power2.inOut" }, 9);
+tl.fromTo(
+  ".footer-section",
+  { opacity: 0 },
+  { opacity: 1, ease: "power2.out" },
+  9
+);
+tl.fromTo(
+  ".footer-title",
+  { y: 60, opacity: 0 },
+  { y: 0, opacity: 1, ease: "power2.out" },
+  9
 );
 
 /* ------------------------------------------------------------------
@@ -170,6 +193,7 @@ const menuLinks = {
   about: document.querySelector(".menu a.about"),
   gallery: document.querySelector(".menu a.gallery"),
   team: document.querySelector(".menu a.team"),
+  maps: document.querySelector(".menu a.maps"),
 };
 
 /* Stato iniziale dei marker: "/" visibile, "_" pronto poco più in basso. */
@@ -212,7 +236,7 @@ function setActiveSection(section) {
   if (menuLinks[section]) animateMarker(menuLinks[section], true);
 }
 
-/* Attivazione voci di menu in base al progress (su 9 segmenti). */
+/* Attivazione voci di menu in base al progress (su 10 segmenti). */
 ScrollTrigger.create({
   trigger: ".scroll-track",
   start: "top top",
@@ -221,10 +245,37 @@ ScrollTrigger.create({
     const p = self.progress;
     let section = null;
     if (p >= 2.6 / SEGMENTS && p < 4.5 / SEGMENTS) section = "about";
-    else if (p >= 4.5 / SEGMENTS && p < 7.5 / SEGMENTS) section = "gallery";
-    else if (p >= 7.5 / SEGMENTS) section = "team";
+    else if (p >= 4.5 / SEGMENTS && p < 7.3 / SEGMENTS) section = "gallery";
+    else if (p >= 7.3 / SEGMENTS && p < 9.3 / SEGMENTS) section = "team";
+    else if (p >= 9.3 / SEGMENTS) section = "maps";
     setActiveSection(section);
   },
+});
+
+/* ------------------------------------------------------------------
+   Click sul menu: scroll animato fino alla sezione selezionata.
+   Per ogni voce definiamo il progress (0..1) in cui la sezione è a video;
+   lo convertiamo nella posizione di scroll della timeline.
+------------------------------------------------------------------ */
+const SECTION_PROGRESS = {
+  about: 3 / SEGMENTS,    // about con foto + testo
+  gallery: 5 / SEGMENTS,  // prima coppia di foto
+  team: 8.6 / SEGMENTS,   // crediti in vista
+  maps: 1,                // footer "cerca diego"
+};
+
+Object.entries(menuLinks).forEach(([key, link]) => {
+  if (!link) return;
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const st = tl.scrollTrigger;
+    const y = st.start + SECTION_PROGRESS[key] * (st.end - st.start);
+    gsap.to(window, {
+      scrollTo: { y, autoKill: false },
+      duration: 1.2,
+      ease: "power2.inOut",
+    });
+  });
 });
 
 window.addEventListener("resize", () => ScrollTrigger.refresh());

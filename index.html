@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/foto_hero.webp" fetchpriority="high" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -97,8 +98,16 @@
   </div>
 </div>
 
-<!-- Traccia di scroll: fornisce l'altezza per le dieci pagine -->
+<!-- Sezione MAPS / FOOTER: foto a tutto schermo con "CERCA DIEGO" -->
+<div class="footer-section" aria-label="Maps">
+  <img class="footer-bg" src="assets/foto_footer.jpg" alt="Maradona scende le scale circondato dai fotografi" />
+  <p class="footer-title">CERCA DIEGO</p>
+  <p class="footer-copy">© 2026 <span>MiraMaradona</span></p>
+</div>
+
+<!-- Traccia di scroll: fornisce l'altezza per le undici pagine -->
 <div class="scroll-track" aria-hidden="true">
+  <section class="page"></section>
   <section class="page"></section>
   <section class="page"></section>
   <section class="page"></section>
@@ -111,9 +120,10 @@
   <section class="page"></section>
 </div>
 
-<!-- GSAP + ScrollTrigger -->
+<!-- GSAP + ScrollTrigger + ScrollToPlugin -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
