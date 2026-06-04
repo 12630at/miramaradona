@@ -89,37 +89,27 @@ html, body {
   color: var(--bianco);
 }
 
-/* marker animato: passa da "/" a "_" quando la voce è attiva */
+/* marker "/" -> "_": glifi impilati in una finestra ritagliata,
+   l'animazione (slot/roll) è gestita da GSAP in main.js */
 .menu .marker {
   position: relative;
   display: inline-block;
+  width: 0.7em;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: -0.06em;
 }
 
 .menu .marker .slash,
 .menu .marker .underscore {
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
 }
 
 .menu .marker .underscore {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateY(0.32em);
-}
-
-/* voce attiva: "/ ABOUT" azzurro diventa "_ ABOUT" bianco */
-.nav-about .menu a.about {
-  color: var(--bianco);
-}
-
-.nav-about .menu a.about .marker .slash {
-  opacity: 0;
-  transform: translateY(-0.32em);
-}
-
-.nav-about .menu a.about .marker .underscore {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 0; /* nascosto finché GSAP non lo fa salire */
 }
 
 /* ---------- TESTO INIZIALE: fisso, in basso a destra ---------- */
@@ -197,7 +187,39 @@ html, body {
   display: block;
 }
 
-/* ---------- TRACCIA DI SCROLL (due pagine) ---------- */
+/* ---------- GALLERY: due colonne a tutta altezza che scorrono opposte ---------- */
+.gallery {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  background: var(--nero);
+  opacity: 0; /* compare scrollando (gestito da GSAP) */
+  will-change: opacity;
+}
+
+.gallery__col {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.gallery__track {
+  display: flex;
+  flex-direction: column;
+  height: 300vh; /* 3 immagini da 100vh */
+  will-change: transform;
+}
+
+.gallery__track img {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* ---------- TRACCIA DI SCROLL ---------- */
 .scroll-track {
   position: relative;
   z-index: 1;

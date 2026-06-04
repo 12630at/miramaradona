@@ -25,29 +25,25 @@ intro
   );
 
 /* ------------------------------------------------------------------
-   Scroll su cinque pagine.
+   Scroll su sette pagine (sei segmenti).
 
-   Pag. 1 -> 2 : compare il titolo "OPERAZIONE MARADONA (2026)" che
-                 sale al centro del viewport (logo, menu e testo
-                 restano fissi, lo sfondo è a tutto schermo).
+   1 -> 2 : compare il titolo "OPERAZIONE MARADONA (2026)" che sale al
+            centro del viewport.
+   2 -> 3 : la foto hero si rimpicciolisce in alto a destra e il titolo
+            la segue, centrandosi sopra la foto.
+   3 -> 4 : (ABOUT) la foto b/n e il testo about appaiono; nel frattempo
+            il testo "iconografia…" si dissolve e il titolo + la sua foto
+            scompaiono.
+   4 -> 5 : (GALLERY, ingresso) il testo about si alza e scompare con la
+            foto b/n; appaiono due foto che dividono la pagina a metà.
+   5 -> 6 : (GALLERY) le due colonne scorrono in direzioni opposte verso
+            la seconda coppia di foto (sx dal basso, dx dall'alto).
+   6 -> 7 : (GALLERY) si scorre fino alla terza coppia di foto.
 
-   Pag. 2 -> 3 : lo SFONDO hero si rimpicciolisce con un'animazione GSAP
-                 e si posiziona in alto a destra, rispettando il margine;
-                 il titolo lo segue rimpicciolendosi e centrandosi sopra
-                 la foto. Il testo "iconografia del mito argentino…"
-                 RIMANE al suo posto.
-
-   Pag. 3 -> 4 : (ABOUT) la foto b/n a tutto schermo e il testo about
-                 appaiono gradualmente fino a fermarsi in posizione.
-
-   Pag. 4 -> 5 : (GALLERY) la foto b/n si alza e scompare insieme alla
-                 foto hero e al titolo in alto a destra, mentre il testo
-                 about resta sullo sfondo nero.
-
-   Lo snap blocca il viewport su ciascuna delle cinque pagine.
+   Lo snap blocca il viewport su ciascuna delle sette pagine.
 ------------------------------------------------------------------ */
 
-/* Geometria del riquadro finale della fotografia (in alto a destra).
+/* Geometria del riquadro finale della fotografia hero (in alto a destra).
    S = frazione di larghezza viewport occupata dalla foto rimpicciolita
    M = margine dall'angolo in alto a destra (px). */
 const M = 48;
@@ -55,9 +51,14 @@ const S = 0.37;
 
 const boxW = () => S * window.innerWidth;
 const boxH = () => S * window.innerHeight;
-/* centro del riquadro finale */
 const boxCX = () => window.innerWidth - M - boxW() / 2;
 const boxCY = () => M + boxH() / 2;
+
+/* La colonna destra della gallery parte dal basso (mostra la prima coppia). */
+gsap.set('.gallery__track[data-col="right"]', { yPercent: -66.667 });
+
+const SEGMENTS = 6;
+const snapTo = Array.from({ length: SEGMENTS + 1 }, (_, i) => i / SEGMENTS);
 
 const tl = gsap.timeline({
   defaults: { ease: "none" },
@@ -68,14 +69,14 @@ const tl = gsap.timeline({
     scrub: true,
     invalidateOnRefresh: true,
     snap: {
-      snapTo: [0, 0.25, 0.5, 0.75, 1],
+      snapTo,
       duration: { min: 0.2, max: 0.6 },
       ease: "power2.inOut",
     },
   },
 });
 
-/* --- Segmento 1 (pagina 1 -> 2): il titolo compare e sale al centro --- */
+/* --- Segmento 1: il titolo compare e sale al centro --- */
 tl.fromTo(
   ".hero__title",
   { xPercent: -50, yPercent: -50, x: 0, y: 90, opacity: 0 },
@@ -83,19 +84,12 @@ tl.fromTo(
   0
 );
 
-/* --- Segmento 2 (pag. 2 -> 3): la foto hero si rimpicciolisce in alto a
-       destra e il titolo la segue. Il testo iniziale resta fermo. --- */
+/* --- Segmento 2: la foto hero si rimpicciolisce in alto a destra --- */
 tl.to(
   ".bg",
-  {
-    scale: () => S,
-    x: () => -M,
-    y: () => M,
-    ease: "power2.inOut",
-  },
+  { scale: () => S, x: () => -M, y: () => M, ease: "power2.inOut" },
   1
 );
-
 tl.to(
   ".hero__title",
   {
@@ -107,16 +101,16 @@ tl.to(
   1
 );
 
-/* --- Segmento 3 (pag. 3 -> 4, ABOUT): la foto b/n e il testo about
-       appaiono gradualmente; contemporaneamente il titolo "OPERAZIONE
-       MARADONA" e la sua foto in alto a destra scompaiono. --- */
-tl.to(".about-bg", { opacity: 1, ease: "none" }, 2);
+/* --- Segmento 3 (ABOUT): foto b/n + testo about appaiono; "iconografia"
+       sparisce; titolo e foto hero scompaiono --- */
+tl.to(".about-bg", { opacity: 1 }, 2);
 tl.fromTo(
   ".about-text",
   { opacity: 0, y: 40 },
   { opacity: 1, y: 0, ease: "power2.out" },
   2
 );
+tl.to(".intro-text", { opacity: 0 }, 2);
 tl.to(
   ".bg",
   { y: () => M - window.innerHeight, opacity: 0, ease: "power2.in" },
@@ -124,17 +118,101 @@ tl.to(
 );
 tl.to(".hero__title", { y: "-=350", opacity: 0, ease: "power2.in" }, 2);
 
-/* --- Segmento 4 (pag. 4 -> 5, GALLERY): la foto b/n si alza e scompare,
-       mentre il testo about resta sullo sfondo nero. --- */
+/* --- Segmento 4 (GALLERY ingresso): il testo about e la foto b/n si
+       alzano e scompaiono; la gallery (due colonne) appare --- */
+tl.to(".about-text", { yPercent: -120, opacity: 0, ease: "power2.in" }, 3);
 tl.to(".about-bg", { yPercent: -100, opacity: 0, ease: "power2.in" }, 3);
+tl.to(".gallery", { opacity: 1, ease: "power2.out" }, 3);
 
-/* Stato attivo del menu: "ABOUT" diventa bianco dalle sezioni about/gallery. */
+/* --- Segmento 5 (GALLERY): scorrimento verso la seconda coppia --- */
+tl.fromTo(
+  '.gallery__track[data-col="left"]',
+  { yPercent: 0 },
+  { yPercent: -33.333 },
+  4
+);
+tl.fromTo(
+  '.gallery__track[data-col="right"]',
+  { yPercent: -66.667 },
+  { yPercent: -33.333 },
+  4
+);
+
+/* --- Segmento 6 (GALLERY): scorrimento verso la terza coppia --- */
+tl.fromTo(
+  '.gallery__track[data-col="left"]',
+  { yPercent: -33.333 },
+  { yPercent: -66.667 },
+  5
+);
+tl.fromTo(
+  '.gallery__track[data-col="right"]',
+  { yPercent: -33.333 },
+  { yPercent: 0 },
+  5
+);
+
+/* ------------------------------------------------------------------
+   Menu: voce attiva in base alla sezione. La voce passa da "/" a "_"
+   con un'animazione GSAP a "rullo" (slot) + cambio colore.
+------------------------------------------------------------------ */
+const menuLinks = {
+  about: document.querySelector(".menu a.about"),
+  gallery: document.querySelector(".menu a.gallery"),
+};
+
+/* Stato iniziale dei marker: "/" visibile, "_" pronto sotto la finestra. */
+Object.values(menuLinks).forEach((a) => {
+  if (!a) return;
+  gsap.set(a.querySelector(".underscore"), { yPercent: 110, opacity: 0 });
+});
+
+function animateMarker(link, active) {
+  if (!link) return;
+  const slash = link.querySelector(".slash");
+  const underscore = link.querySelector(".underscore");
+  gsap.killTweensOf([link, slash, underscore]);
+
+  gsap.to(link, {
+    color: active ? "#FFFFFF" : "#8DC5D9",
+    duration: 0.45,
+    ease: "power2.out",
+  });
+  gsap.to(slash, {
+    yPercent: active ? -110 : 0,
+    opacity: active ? 0 : 1,
+    duration: 0.5,
+    ease: active ? "back.in(2)" : "back.out(2)",
+  });
+  gsap.to(underscore, {
+    yPercent: active ? 0 : 110,
+    opacity: active ? 1 : 0,
+    duration: 0.5,
+    ease: active ? "back.out(2)" : "back.in(2)",
+  });
+}
+
+let activeSection = null;
+function setActiveSection(section) {
+  if (section === activeSection) return;
+  if (menuLinks[activeSection]) animateMarker(menuLinks[activeSection], false);
+  activeSection = section;
+  if (menuLinks[section]) animateMarker(menuLinks[section], true);
+}
+
+/* La voce ABOUT si attiva quando appare il testo about; GALLERY quando
+   entriamo nella sezione gallery (progress calcolato sui 6 segmenti). */
 ScrollTrigger.create({
   trigger: ".scroll-track",
   start: "top top",
   end: "bottom bottom",
-  onUpdate: (self) =>
-    document.body.classList.toggle("nav-about", self.progress > 0.6),
+  onUpdate: (self) => {
+    const p = self.progress;
+    let section = null;
+    if (p >= 2.4 / SEGMENTS && p < 3.4 / SEGMENTS) section = "about";
+    else if (p >= 3.4 / SEGMENTS) section = "gallery";
+    setActiveSection(section);
+  },
 });
 
 window.addEventListener("resize", () => ScrollTrigger.refresh());

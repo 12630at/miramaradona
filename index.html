@@ -24,9 +24,9 @@
 <!-- Menu: fisso, in basso a sinistra -->
 <nav class="menu" aria-label="Menu principale">
   <a class="about" href="#about"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> ABOUT</a>
-  <a href="#gallery"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> GALLERY</a>
-  <a href="#team"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> TEAM</a>
-  <a href="#maps"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> MAPS</a>
+  <a class="gallery" href="#gallery"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> GALLERY</a>
+  <a class="team" href="#team"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> TEAM</a>
+  <a class="maps" href="#maps"><span class="marker"><span class="slash">/</span><span class="underscore">_</span></span> MAPS</a>
 </nav>
 
 <!-- Testo iniziale: fisso, in basso a destra (apertura del sito) -->
@@ -52,8 +52,29 @@
   <span>di una città che si reinventa attraverso il suo dio.</span>
 </p>
 
-<!-- Traccia di scroll: fornisce l'altezza per le cinque pagine -->
+<!-- Sezione GALLERY: due colonne che scorrono in direzioni opposte -->
+<div class="gallery" aria-label="Gallery">
+  <div class="gallery__col">
+    <div class="gallery__track" data-col="left">
+      <img src="assets/gallery/sx-1.jpg" alt="Murale di Maradona in Via Tribunali" />
+      <img src="assets/gallery/sx-2.jpg" alt="Stencil di Maradona su manifesti" />
+      <img src="assets/gallery/sx-3.jpg" alt="Street art di Maradona con cuore rosso" />
+    </div>
+  </div>
+  <div class="gallery__col">
+    <!-- ordine DOM invertito: la colonna destra parte dal basso e scende -->
+    <div class="gallery__track" data-col="right">
+      <img src="assets/gallery/dx-3.jpg" alt="Collage di Maradona con cappello" />
+      <img src="assets/gallery/dx-2.jpg" alt="Maradona angelo con la coppa" />
+      <img src="assets/gallery/dx-1.jpg" alt="Collage di Maradona con maglia Cirio" />
+    </div>
+  </div>
+</div>
+
+<!-- Traccia di scroll: fornisce l'altezza per le sette pagine -->
 <div class="scroll-track" aria-hidden="true">
+  <section class="page"></section>
+  <section class="page"></section>
   <section class="page"></section>
   <section class="page"></section>
   <section class="page"></section>
